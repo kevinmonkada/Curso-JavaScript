@@ -1,6 +1,7 @@
 import countdown from "./dom/cuenta_regresiva.js";
 import haburguerMenu from "./dom/menu_hamburguesa.js";
 import reloj from "./dom/reloj_alarma.js";
+import scrollTopButton from "./dom/scroll_button.js";
 import { moveBall, shortcuts } from "./dom/teclado.js";
 
 const d = document;
@@ -16,6 +17,7 @@ d.addEventListener("DOMContentLoaded", (e) => {
 		"audioReloj"
 	);
 	countdown("countdown", "Dec 18, 2023", "Feliz Cumpleaños🎉🎊🪩🥳🎁🍾");
+	scrollTopButton(".scroll-top-btn"); //since it is a class I use a dot to call it if its an ID I use #
 });
 
 d.addEventListener("keydown", (e) => {
