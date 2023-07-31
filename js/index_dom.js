@@ -19,11 +19,11 @@ d.addEventListener("DOMContentLoaded", (e) => {
 	);
 	countdown("countdown", "Dec 18, 2023", "Feliz Cumpleaños🎉🎊🪩🥳🎁🍾");
 	scrollTopButton(".scroll-top-btn"); //since it is a class I use a dot to call it if its an ID I use #
-
-	darkMode(".dark-mode-btn", "dark-mode");
 });
 
 d.addEventListener("keydown", (e) => {
 	shortcuts(e);
 	moveBall(e, ".ball", ".stage");
 });
+
+darkMode(".dark-mode-btn", "dark-mode");
