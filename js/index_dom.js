@@ -1,5 +1,6 @@
 import countdown from "./dom/cuenta_regresiva.js";
 import darkMode from "./dom/dark_mode.js";
+import userDeviceInfo from "./dom/device_detection.js";
 import haburguerMenu from "./dom/menu_hamburguesa.js";
 import reloj from "./dom/reloj_alarma.js";
 import responsiveMedia from "./dom/responsive_object.js";
@@ -45,6 +46,7 @@ rel="noopener">Ver Mapa</a>`,
 		></iframe>`
 	);
 	responsiveTester("responsive-tester");
+	userDeviceInfo("user-device");
 });
 
 d.addEventListener("keydown", (e) => {
