@@ -2,6 +2,7 @@ import countdown from "./dom/cuenta_regresiva.js";
 import darkMode from "./dom/dark_mode.js";
 import userDeviceInfo from "./dom/device_detection.js";
 import haburguerMenu from "./dom/menu_hamburguesa.js";
+import networkStatus from "./dom/network_detection.js";
 import reloj from "./dom/reloj_alarma.js";
 import responsiveMedia from "./dom/responsive_object.js";
 import responsiveTester from "./dom/responsive_tester.js";
@@ -55,3 +56,4 @@ d.addEventListener("keydown", (e) => {
 });
 
 darkMode(".dark-mode-btn", "dark-mode");
+networkStatus();
