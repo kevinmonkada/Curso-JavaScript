@@ -8,6 +8,7 @@ import responsiveMedia from "./dom/responsive_object.js";
 import responsiveTester from "./dom/responsive_tester.js";
 import scrollTopButton from "./dom/scroll_button.js";
 import { moveBall, shortcuts } from "./dom/teclado.js";
+import webCam from "./dom/webcam_detection.js";
 
 const d = document;
 
@@ -48,6 +49,7 @@ rel="noopener">Ver Mapa</a>`,
 	);
 	responsiveTester("responsive-tester");
 	userDeviceInfo("user-device");
+	webCam("webcam");
 });
 
 d.addEventListener("keydown", (e) => {
