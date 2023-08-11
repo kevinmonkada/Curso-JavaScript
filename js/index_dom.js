@@ -10,6 +10,8 @@ import scrollTopButton from "./dom/scroll_button.js";
 import { moveBall, shortcuts } from "./dom/teclado.js";
 import webCam from "./dom/webcam_detection.js";
 import getGeolocation from "./dom/geolocation.js";
+import searchFilters from "./dom/search_filter.js";
+import draw from "./dom/give_away.js";
 
 const d = document;
 
@@ -52,6 +54,8 @@ rel="noopener">Ver Mapa</a>`,
 	userDeviceInfo("user-device");
 	webCam("webcam");
 	getGeolocation("geolocation");
+	searchFilters(".card-filter", ".card");
+	draw("#winner-btn", ".player");
 });
 
 d.addEventListener("keydown", (e) => {

@@ -233,3 +233,34 @@ video {
 .offline {
 	background-color: #e71b1b;
 }
+
+/* -------------------------------------------------------------------------- */
+/*                                SearchFilters                               */
+/* -------------------------------------------------------------------------- */
+
+.cards {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+}
+
+.card {
+	background-color: var(--second-color);
+	color: var(--main-color);
+	transition: all 0.3 ease-out;
+}
+
+.card img {
+	width: 100%;
+	height: auto;
+}
+
+.card figcaption {
+	padding: 1rem;
+}
+
+.filter {
+	/* display: none; */
+	visibility: hidden;
+	opacity: 0;
+	order: 1;
+}
