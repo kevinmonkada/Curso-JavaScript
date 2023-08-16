@@ -22,4 +22,3 @@ export default function smartVideo() {
 	const observer = new IntersectionObserver(cb, { threshold: 0.8 });
 	$videos.forEach((el) => observer.observe(el));
 }
-/*  */
