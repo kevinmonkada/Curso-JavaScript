@@ -18,6 +18,8 @@ export default function draw(btn, selector) {
 		}
 	});
 }
+
+//Funcion para usar en cualquier otra pagina, sea facebook YT o algo asi
 /* const getWinnerComment = (selector) => {
 	const $players = document.querySelectorAll(selector),
 		random = Math.floor(Math.random() * $players.length),

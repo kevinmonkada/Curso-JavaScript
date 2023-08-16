@@ -12,6 +12,9 @@ import webCam from "./dom/webcam_detection.js";
 import getGeolocation from "./dom/geolocation.js";
 import searchFilters from "./dom/search_filter.js";
 import draw from "./dom/give_away.js";
+import slidesSlider from "./dom/carousel.js";
+import scrollSpy from "./dom/scrollspy.js";
+import smartVideo from "./dom/smart_video.js";
 
 const d = document;
 
@@ -56,6 +59,9 @@ rel="noopener">Ver Mapa</a>`,
 	getGeolocation("geolocation");
 	searchFilters(".card-filter", ".card");
 	draw("#winner-btn", ".player");
+	slidesSlider();
+	scrollSpy();
+	smartVideo();
 });
 
 d.addEventListener("keydown", (e) => {
