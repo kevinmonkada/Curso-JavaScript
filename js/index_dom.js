@@ -15,6 +15,7 @@ import draw from "./dom/give_away.js";
 import slidesSlider from "./dom/carousel.js";
 import scrollSpy from "./dom/scrollspy.js";
 import smartVideo from "./dom/smart_video.js";
+import contactFormValidations from "./dom/form_validations.js";
 
 const d = document;
 
@@ -62,6 +63,7 @@ rel="noopener">Ver Mapa</a>`,
 	slidesSlider();
 	scrollSpy();
 	smartVideo();
+	contactFormValidations();
 });
 
 d.addEventListener("keydown", (e) => {
