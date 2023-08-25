@@ -203,7 +203,18 @@
 			</section>
 			<section id="seccion14" class="section" data-scroll-spy>
 				<h2>Validacion de Formulario</h2>
-				<form class="contact-form">
+				<form
+					class="contact-form"
+					action="https://formsubmit.co/kevinmonkada@gmail.com"
+					method="POST"
+					target="_blank"
+				>
+					<input
+						type="hidden"
+						name="_next"
+						value="http://127.0.0.1:5500/thankyou"
+					/>
+					<input type="hidden" name="_captcha" value="false" />
 					<legend>Envianos tus comentarios</legend>
 					<input
 						type="text"
