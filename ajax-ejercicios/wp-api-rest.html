@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Wordpress REST API</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap"
+      rel="stylesheet" />
+    <style>
+      html {
+        box-sizing: border-box;
+        font-family: "Raleway", sans-serif;
+        font-size: 16px;
+      }
+
+      *,
+      *:after,
+      *:before {
+        box-sizing: inherit;
+      }
+
+      a {
+        color: #01579b;
+        transition: all 0.3s ease-out;
+      }
+
+      a:hover {
+        opacity: 0.75;
+      }
+
+      img {
+        max-width: 100%;
+        height: auto;
+      }
+
+      h1 {
+        text-align: center;
+      }
+
+      hr {
+        border: thin solid #01579b;
+        margin: 3rem auto;
+        width: 80%;
+      }
+
+      .site {
+        margin: 1rem auto;
+        padding: 1rem;
+        max-width: 50%;
+        text-align: center;
+      }
+
+      .post {
+        margin: 1rem auto;
+        padding: 1rem;
+        border-radius: 0.5rem;
+        max-width: 80%;
+        text-align: center;
+        background-color: #eceff1;
+      }
+
+      .post-author img {
+        border-radius: 50%;
+      }
+
+      .post-date {
+        margin: 1rem auto;
+        display: block;
+      }
+
+      .post-excerpt,
+      .post-categories,
+      .post-tags,
+      .post-content {
+        text-align: left;
+      }
+
+      .post-content summary {
+        font-size: 1rem;
+        font-weight: bold;
+      }
+
+      .post-content > article {
+        padding: 1rem;
+        background-color: #e3f2fd;
+      }
+
+      .post-content img {
+        display: block;
+        margin: auto;
+      }
+
+      .loader {
+        display: none;
+        margin: 2rem auto;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Wordpress REST API</h1>
+    <article id="site" class="site"></article>
+    <section id="posts" class="posts"></section>
+    <img class="loader" src="../assets/loader.svg" alt="Cargando..." />
+    <template id="post-template">
+      <article class="post">
+        <img class="post-image" />
+        <aside>
+          <h2 class="post-title"></h2>
+          <figure class="post-author"></figure>
+          <small class="post-date"></small>
+          <a class="post-link" target="_blank">Ver publicacion orginal</a>
+          <p class="post-excerpt"></p>
+          <div class="post-categories"></div>
+          <div class="post-tags"></div>
+          <details class="post-content">
+            <summary>Ver contenido de la publicacion</summary>
+            <article></article>
+          </details>
+        </aside>
+      </article>
+      <hr />
+    </template>
+    <script>
+      const d = document,
+        w = window,
+        $site = d.getElementById("site"),
+        $posts = d.getElementById("posts"),
+        $loader = d.querySelector(".loader"),
+        $template = d.getElementById("post-template").content,
+        $fragment = d.createDocumentFragment(),
+        DOMAIN = "https://css-tricks.com",
+        SITE = `${DOMAIN}/wp-json`,
+        API_WP = `${SITE}/wp/v2`,
+        POSTS = `${API_WP}/posts?_embed`,
+        PAGES = `${API_WP}/pages`,
+        CATEGORIES = `${API_WP}/categories`;
+
+      let page = 1,
+        perPage = 10;
+
+      function getSiteData() {
+        fetch(SITE)
+          .then((res) => (res.ok ? res.json() : Promise.reject(res)))
+          .then((json) => {
+            console.log(json);
+            $site.innerHTML = `
+                 <h3>Sitio Web:</h3>
+                 <h2>
+                   <a href="${json.url}" target="_blank">${json.name}</a>
+                   </h2>
+                   <p>${json.description}</p>
+                   <p>${json.timezone_string}</p>
+                   `;
+          })
+          .catch((err) => {
+            console.log(err);
+            let message = err.statusText || "Algo salió mal... :(";
+            $site.innerHTML = `<p>Error ${err.status}: ${message}</p>`;
+          });
+      }
+
+      function getPosts() {
+        $loader.style.display = "block";
+
+        fetch(`${POSTS}&page=${page}&per_page=${perPage}`)
+          .then((res) => (res.ok ? res.json() : Promise.reject(res)))
+          .then((json) => {
+            console.log(json);
+
+            json.forEach((el) => {
+              let categories = "",
+                tags = "";
+
+              el._embedded["wp:term"][0].forEach(
+                (el) => (categories += `<li>${el.name}</li>`)
+              );
+              el._embedded["wp:term"][1].forEach(
+                (el) => (tags += `<li>${el.name}</li>`)
+              );
+
+              $template.querySelector(".post-image").src = el._embedded[
+                "wp:featuredmedia"
+              ]
+                ? el._embedded["wp:featuredmedia"][0].source_url
+                : "";
+              $template.querySelector(".post-image").alt = el._embedded[
+                "wp:featuredmedia"
+              ]
+                ? el.title.rendered
+                : "";
+              $template.querySelector(".post-title").innerHTML =
+                el.title.rendered;
+              $template.querySelector(".post-author").innerHTML =
+                el._embedded.author[0].code === "rest_user_invalid_id"
+                  ? ""
+                  : `
+                <img src="${el._embedded.author[0].avatar_urls[24]}" alt="${el._embedded.author[0].name}">
+                <figcaption>${el._embedded.author[0].name}</figcaption>`;
+              /* $template.querySelector(".post-author").innerHTML = `
+              <a href="${DOMAIN}/author/${el.yoast_head_json.og_site_name}">${el.yoast_head_json.author}</a>
+                       `; */
+              $template.querySelector(".post-date").innerHTML = new Date(
+                el.date
+              ).toLocaleString();
+              $template.querySelector(".post-link").href = el.link;
+              $template.querySelector(".post-excerpt").innerHTML =
+                el.excerpt.rendered.replace("[&hellip;]", "...");
+
+              $template.querySelector(".post-categories").innerHTML = `
+                <p>Categorías:</p>
+                <ul>${categories}</ul>
+                `;
+              $template.querySelector(".post-tags").innerHTML = `
+                <p>Etiquetas:</p>
+                <ul>${tags}</ul>
+                `;
+
+              //Esta parte toca organizarla porque la API de wordpress no esta mandando los avatares ni informacion de los autores
+              /* if (el._embedded.author[0].code === "rest_user_invalid_id") {
+                $template.querySelector(".post-author").innerHTML = `
+                       <img class="no-avatar" src="assets/sin-avatar.png" alt="Sin avatar">
+                       <figcaption>Sin autor</figcaption>
+                       `;
+              } else {
+                $template.querySelector(".post-author").innerHTML = `
+                       <img src="" alt="${el.yoast_head_json.author}">
+                       <figcaption>${el.yoast_head_json.author}</figcaption>
+                       `;
+              } */
+              $template.querySelector(".post-content > article").innerHTML =
+                el.content.rendered;
+
+              let $clone = d.importNode($template, true);
+              $fragment.appendChild($clone);
+            });
+
+            $posts.appendChild($fragment);
+            $loader.style.display = "none";
+          })
+          .catch((err) => {
+            console.log(err);
+            let message = err.statusText || "Algo salió mal... :(";
+            $posts.innerHTML = `<p>Error ${err.status}: ${message}</p>`;
+            $loader.style.display = "none";
+          });
+      }
+
+      d.addEventListener("DOMContentLoaded", (e) => {
+        getSiteData();
+        getPosts();
+      });
+
+      w.addEventListener("scroll", (e) => {
+        const {scrollTop, clientHeight, scrollHeight} = d.documentElement;
+        //console.log(d.documentElement);
+        //console.log(scrollTop, clientHeight, scrollHeight);
+
+        if (scrollTop + clientHeight === scrollHeight) {
+          //console.log("cargar mas posts");
+          page++;
+          setTimeout(() => {
+            getPosts();
+          }, 1500);
+        }
+      });
+
+      /* fetch(PAGES)
+           .then((res) => (res.ok ? res.json() : Promise.reject(res)))
+           .then((json) => {
+             console.log(json);
+           }); */
+    </script>
+  </body>
+</html>
